@@ -19,7 +19,7 @@ exports.createEvent = async (req, res) => {
     // Schedule a notification for this event
     await scheduleNotification(newEvent);
 
-    res.status(201).json({( message: req.t("event_created"), event: newEvent});
+    res.status(201).json({ message: req.t("event_created"), event: newEvent }); // Fixed syntax error
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

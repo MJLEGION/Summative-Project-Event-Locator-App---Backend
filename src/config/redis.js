@@ -1,8 +1,17 @@
+const Redis = require("ioredis");
 const { Queue, Worker } = require("bullmq");
 
-const redisOptions = { connection: { host: "127.0.0.1", port: 6379 } };
+// Create Redis connection
+const redisConnection = new Redis({
+  host: "127.0.0.1",
+  port: 6379,
+  maxRetriesPerRequest: null  // Add this line to resolve the error
+});
 
 // Create a job queue
-const eventQueue = new Queue("eventQueue", redisOptions);
+const eventQueue = new Queue("event-notifications", { connection: redisConnection });
 
-module.exports = { eventQueue, Worker, redisOptions };
+module.exports = { 
+  redisConnection, 
+  eventQueue
+};

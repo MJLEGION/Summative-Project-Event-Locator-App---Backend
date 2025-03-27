@@ -1,8 +1,28 @@
-const { Worker, redisOptions } = require("../config/redis");
+const { Worker } = require("bullmq");
+const { redisConnection } = require("../config/redis");
 
-const notificationWorker = new Worker("eventQueue", async (job) => {
-  console.log(`📢 Sending notification for event: ${job.data.eventName}`);
-  // Here, you can send an email/SMS notification
-}, redisOptions);
+const notificationWorker = new Worker(
+  "event-notifications", 
+  async (job) => {
+    try {
+      const { eventId, eventName } = job.data;
+      console.log(`🔔 Notification triggered for event: ${eventName}`);
+      console.log(`Event ID: ${eventId}`);
+    } catch (error) {
+      console.error("Notification processing error:", error);
+    }
+  },
+  { 
+    connection: redisConnection 
+  }
+);
 
-console.log("✅ Notification worker started");
+notificationWorker.on('completed', (job) => {
+  console.log(`Notification job ${job.id} completed`);
+});
+
+notificationWorker.on('failed', (job, err) => {
+  console.error(`Notification job ${job.id} failed:`, err);
+});
+
+module.exports = notificationWorker;
