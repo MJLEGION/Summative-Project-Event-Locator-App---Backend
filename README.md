@@ -139,3 +139,6 @@ npm test
 
 Video will be linked below 
 https://www.loom.com/share/9d6ecd12b14840cca14f529ba670ea4b?sid=f2809a03-3767-4717-977b-f56685e890bb 
+
+
+The software i used for screen recording stops at 5 min
